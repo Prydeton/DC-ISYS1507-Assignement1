@@ -1,0 +1,86 @@
+CREATE TABLE Employees(
+employee_id int,
+first_name varchar(30),
+last_name varchar(30),
+phone_number char(4),
+hire_date date,
+job_id int,
+salary int,
+CONSTRAINT pk_employee_id PRIMARY KEY (employee_id)
+);
+
+INSERT INTO Employees VALUES (50,'Adam','Smith','1234','26/OCT/2009',22,66000);
+INSERT INTO Employees VALUES (66,'Tom','Moosa','1235','10/DEC/2016',10,140000);
+INSERT INTO Employees VALUES (10,'Jonny','Deans','1236','09/SEP/2015',33,70000);
+INSERT INTO Employees VALUES (12,'Adam','Jones','1247','08/AUG/2019',10,138000);
+INSERT INTO Employees VALUES (18,'Joseph','Ryan','1277','05/MAY/2020',10,150000);
+
+CREATE TABLE Jobs(
+job_id int,
+job_title varchar(30),
+min_salary int,
+max_salary int,
+CONSTRAINT pk_job_id PRIMARY KEY (job_id)
+);
+
+INSERT INTO Jobs VALUES (10,'Deb Manager',120000,150000);
+INSERT INTO Jobs VALUES (22,'Accountant',60000,80000);
+INSERT INTO Jobs VALUES (33,'Programmer',60000,80000);
+INSERT INTO Jobs VALUES (45,'Senior Programmer',70000,120000);
+
+CREATE TABLE Countries(
+country_id int,
+country_name varchar(30),
+CONSTRAINT pk_country_id PRIMARY KEY (country_id)
+);
+
+INSERT INTO Countries VALUES (1, 'Australia');
+INSERT INTO Countries VALUES (2, 'Vietnam');
+INSERT INTO Countries VALUES (3, 'Spain');
+
+CREATE TABLE Locations(
+location_id int,
+street_address varchar(30),
+postal_code varchar(4),
+city varchar(30),
+state_province varchar(4),
+country_id int,
+CONSTRAINT pk_location_id PRIMARY KEY (location_id),
+CONSTRAINT fk_country_id FOREIGN KEY (country_id) REFERENCES Countries (country_id)
+);
+
+INSERT INTO Locations VALUES (10,'123 Collins St','3000','Melbourne','VIC',1);
+INSERT INTO Locations VALUES (20,'222 Bourke St','3000','Melbourne','VIC',1);
+INSERT INTO Locations VALUES (30,'555 Swanston St','3000','Melbourne','VIC',1);
+
+CREATE TABLE Departments(
+department_id int,
+department_name varchar(30),
+manager_id int,
+location_id int,
+CONSTRAINT pk_department_id PRIMARY KEY (department_id),
+CONSTRAINT fk_manager_id FOREIGN KEY (manager_id) REFERENCES Employees (employee_id),
+CONSTRAINT fk_location_id FOREIGN KEY (location_id) REFERENCES Locations (location_id)
+);
+
+INSERT INTO Departments VALUES (1,'IT Services',12,10);
+INSERT INTO Departments VALUES (2,'Accounting',66,20);
+INSERT INTO Departments VALUES (3,'Human Resources',18,30);
+
+CREATE TABLE JobHistory(
+employee_id int,
+start_date date,
+end_date date,
+job_id int,
+department_id int,
+CONSTRAINT pk_composite PRIMARY KEY (employee_id, start_date, end_date),
+CONSTRAINT fk_employee_id FOREIGN KEY (employee_ID) REFERENCES Employees (employee_id),
+CONSTRAINT fk_job_id FOREIGN KEY (job_id) REFERENCES Jobs (job_id),
+CONSTRAINT fk_department_id FOREIGN KEY (department_id) REFERENCES Departments (department_id)
+);
+
+INSERT INTO JobHistory VALUES (10,'1/JAN/2001','10/APR/2002',33,1);
+INSERT INTO JobHistory VALUES (10,'11/APR/2002','20/AUG/2002',33,1);
+INSERT INTO JobHistory VALUES (12,'1/JAN/1998','5/OCT/2003',33,1);
+INSERT INTO JobHistory VALUES (12,'6/OCT/2003','10/JUN/2004',33,1);
+INSERT INTO JobHistory VALUES (12,'7/OCT/2004','8/JUL/2009',33,1);
